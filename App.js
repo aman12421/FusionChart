@@ -1,55 +1,58 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, Text, View, Platform } from 'react-native';
+import { Platform, StyleSheet, Text, View, Alert } from 'react-native';
 import ReactNativeFusionCharts from 'react-native-fusioncharts';
 
-export default class App extends Component {
+export default class ListenEvents extends Component {
   constructor(props) {
     super(props);
-    //STEP 2 - Chart Data
-    const chartData = [
-      { label: "Venezuela", value: "250" },
-      { label: "Saudi", value: "260" },
-      { label: "Canada", value: "180" },
-      { label: "Iran", value: "140" },
-      { label: "Russia", value: "115" },
-      { label: "UAE", value: "100" },
-      { label: "US", value: "30" },
-      { label: "China", value: "30" },
-    ];
-    //STEP 3 - Chart Configurations
+
     const chartConfig = {
-      type: "column2D",
-      width: "100%",
-      height: "400",
-      dataFormat: "json",
+      type: 'column2d',
+      width: '100%',
+      height: '400',
+      dataFormat: 'json',
       dataSource: {
         chart: {
-          caption: "Countries With Most Oil Reserves [2017-18]",
-          subCaption: "In MMbbl = One Million barrels",
-          xAxisName: "Country",
-          yAxisName: "Reserves (MMbbl)",
-          numberSuffix: "K",
-          theme: "fusion",
-          exportEnabled: 1 // to enable the export chart functionality
+          caption: 'Countries With Most Oil Reserves [2017-18]',
+          subCaption: 'In MMbbl = One Million barrels',
+          xAxisName: 'Country',
+          yAxisName: 'Reserves (MMbbl)',
+          numberSuffix: 'K',
+          theme: 'fusion'
         },
-        data: chartData
+        data: [
+          { label: 'Venezuela', value: '290' },
+          { label: 'Saudi', value: '260' },
+          { label: 'Canada', value: '180' },
+          { label: 'Iran', value: '140' },
+          { label: 'Russia', value: '115' },
+          { label: 'UAE', value: '100' },
+          { label: 'US', value: '30' },
+          { label: 'China', value: '30' }
+        ]
       }
     };
 
     this.state = {
-      chartConfig
+      chartConfig,
+      events: {
+        // Add your events method here:
+        // Event name should be in small letters.
+        dataplotclick: (e, a) => {
+          Alert.alert(`You clicked on ${e.data.categoryLabel}`);
+        }
+      }
     };
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.heading}>
-          FusionCharts Integration with React Native
-        </Text>
+        <Text style={styles.header}>Listen to events from chart</Text>
         <View style={styles.chartContainer}>
           <ReactNativeFusionCharts
             chartConfig={this.state.chartConfig}
+            events={this.state.events}
           />
         </View>
       </View>
@@ -62,15 +65,15 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10
   },
-  heading: {
+  header: {
+    fontWeight: 'bold',
     fontSize: 20,
     textAlign: 'center',
-    marginBottom: 10
+    paddingBottom: 10
   },
   chartContainer: {
-    height: 200
+    height: 400,
+    borderColor: '#000',
+    borderWidth: 1
   }
-});
-
-// skip this line if using Create React Native App
-AppRegistry.registerComponent('ReactNativeFusionCharts', () => App);
+})
